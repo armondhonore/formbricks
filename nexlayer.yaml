@@ -2,27 +2,35 @@ application:
   name: formbricks
   pods:
   - name: app
-    image: ghcr.io/formbricks/formbricks:latest
+    image: ghcr.io/formbricks/formbricks:3.17.1
     path: /
     servicePorts:
     - 3000
     vars:
       WEBAPP_URL: "https://relaxed-weasel-formbricks.cloud.nexlayer.ai"
-      DATABASE_URL: "postgresql://formbricks:formbricks@postgres.pod:5432/formbricks"
+      DATABASE_URL: "postgresql://formbricks:formbricks@formbricks-postgres-service:5432/formbricks"
       NEXTAUTH_SECRET: "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"
       NEXTAUTH_URL: "https://relaxed-weasel-formbricks.cloud.nexlayer.ai"
       ENCRYPTION_KEY: "e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
       SHORT_URL_BASE: "https://relaxed-weasel-formbricks.cloud.nexlayer.ai"
       EMAIL_VERIFICATION_DISABLED: "1"
       PASSWORD_RESET_DISABLED: "0"
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "512Mi"
+      limits:
+        cpu: "2"
+        memory: "2Gi"
   - name: postgres
-    image: postgres:16-alpine
+    image: mirror.gcr.io/pgvector/pgvector:pg16
     servicePorts:
     - 5432
     vars:
       POSTGRES_DB: formbricks
       POSTGRES_USER: formbricks
       POSTGRES_PASSWORD: formbricks
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
     - name: formbricks-db
       mountPath: /var/lib/postgresql/data
