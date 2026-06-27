@@ -30,6 +30,7 @@ application:
       POSTGRES_DB: formbricks
       POSTGRES_USER: formbricks
       POSTGRES_PASSWORD: formbricks
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
     - name: formbricks-db
       mountPath: /var/lib/postgresql/data
